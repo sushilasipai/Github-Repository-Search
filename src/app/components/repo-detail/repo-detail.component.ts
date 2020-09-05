@@ -1,14 +1,7 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  ViewEncapsulation,
-  ElementRef,
-} from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GithubService } from '../../services/github/github.service';
 import * as showdown from 'showdown';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-repo-detail',
@@ -17,19 +10,32 @@ import * as showdown from 'showdown';
 })
 export class RepoDetailComponent implements OnInit {
   readmeRaw = 'null';
-
-  @Input() repoDetail: any;
-
-  @Output() getReposEvent = new EventEmitter();
+  id: String;
+  repoDetail: any;
+  repos: any;
 
   constructor(
     private githubService: GithubService,
-    private elementRef: ElementRef
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
-  //gets formatted readme.md contents
   ngOnInit() {
+    this.showRepoDetails();
+  }
+
+  //go to home page on back button click
+  getRepoList() {
+    this.githubService.backFlg = true;
+    this.router.navigateByUrl('home');
+  }
+
+  //get repository details of the selected repo
+  showRepoDetails() {
+    this.repoDetail = this.githubService.getRepoDetails();
+
     const readmeurl = this.repoDetail.url + '/readme';
+
     this.githubService.getRepoInfo(readmeurl).subscribe((data) => {
       var converter = new showdown.Converter();
       this.readmeRaw = converter.makeHtml(this.b64_to_utf8(data.content));
@@ -40,10 +46,5 @@ export class RepoDetailComponent implements OnInit {
   b64_to_utf8(str) {
     str = str.replace(/\s/g, '');
     return decodeURIComponent(escape(window.atob(str)));
-  }
-
-  //emits event to parent when back button clicked on detail page
-  getRepoList() {
-    this.getReposEvent.emit();
   }
 }

@@ -16,7 +16,6 @@ export class SortPipe implements PipeTransform {
     //sorts columns in descSort array in descending order
     dataList.sort((a, b) => {
       if (column == 'owner.login') {
-        console.log(a['owner']['login']);
         if (a['owner']['login'] > b['owner']['login']) {
           return 1;
         } else if (a['owner']['login'] < b['owner']['login']) {

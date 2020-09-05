@@ -4,6 +4,13 @@ $tableRowBgColor: pink;
 $btnColor: #a0cff0;
 $labelColor: rgb(97, 92, 92);
 $hoverColor: rgb(243, 141, 189);
+$btnColor: rgb(196, 206, 238);
+$btnHoverColor: rgb(109, 172, 245);
+
+h4 {
+  margin-top: 10%;
+  text-align: center;
+}
 
 .table {
   color: $tableTextColor;
@@ -61,4 +68,27 @@ $hoverColor: rgb(243, 141, 189);
 }
 
 @media (max-width: 767px) {
+}
+
+.searcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  input {
+    width: 37%;
+    height: 35px;
+  }
+
+  button {
+    height: 35px;
+    width: 80px;
+    border-radius: 8px;
+    margin-left: 20px;
+    background-color: $btnColor;
+
+    &:hover {
+      background-color: $btnHoverColor;
+    }
+  }
 }

@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+$bgColor: rgb(243, 222, 222);
+$headerColor: rgb(236, 61, 90);
+
+h2 {
+  color: $headerColor;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.container {
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $bgColor;
+  overflow-y: auto;
+  overflow-x: auto;
+}

@@ -1,46 +1,49 @@
-<div class="detail">
-  <button class="detail__btn" (click)="getRepoList()">Back</button>
+<div class="container">
+  <h2>Repository Details</h2>
+  <div class="detail">
+    <button class="detail__btn" (click)="getRepoList()">Back</button>
 
-  <div class="detail__card">
-    <div class="detail__card__info">
-      <div>
-        <img
-          class="detail__card__info__img"
-          src="{{ repoDetail.owner.avatar_url }}"
-        />
+    <div class="detail__card">
+      <div class="detail__card__info">
+        <div>
+          <img
+            class="detail__card__info__img"
+            src="{{ repoDetail.owner.avatar_url }}"
+          />
+        </div>
+        <div>
+          <a
+            class="detail__card__info__data-reponame"
+            href="{{ repoDetail.svn_url }}"
+            >{{ repoDetail.name }}</a
+          >
+          <br />
+
+          <a
+            class="detail__card__info__data"
+            href="{{ repoDetail.owner.html_url }}"
+            ><i class="fas fa-user-tie"></i> {{ repoDetail.owner.login }}</a
+          >
+          <br />
+          <br />
+          <label class="detail__card__info__data"
+            >Open Issues: {{ repoDetail.open_issues_count }}</label
+          >
+          <br />
+          <label class="detail__card__info__data"
+            >Default Branch: {{ repoDetail.default_branch }}</label
+          >
+        </div>
       </div>
-      <div>
-        <a
-          class="detail__card__info__data-reponame"
-          href="{{ repoDetail.svn_url }}"
-          >{{ repoDetail.name }}</a
-        >
-        <br />
-
-        <a
-          class="detail__card__info__data"
-          href="{{ repoDetail.owner.html_url }}"
-          ><i class="fas fa-user-tie"></i> {{ repoDetail.owner.login }}</a
-        >
-        <br />
-        <br />
-        <label class="detail__card__info__data"
-          >Open Issues: {{ repoDetail.open_issues_count }}</label
-        >
-        <br />
-        <label class="detail__card__info__data"
-          >Default Branch: {{ repoDetail.default_branch }}</label
-        >
+      <div *ngIf="readmeRaw == 'null'" class="detail__card__readme">
+        Loading readme contents... Plese wait!!!
       </div>
-    </div>
-    <div *ngIf="readmeRaw == 'null'" class="detail__card__readme">
-      Loading readme contents... Plese wait!!!
-    </div>
 
-    <div
-      *ngIf="readmeRaw != 'null'"
-      class="detail__card__readme"
-      [innerHTML]="readmeRaw"
-    ></div>
+      <div
+        *ngIf="readmeRaw != 'null'"
+        class="detail__card__readme"
+        [innerHTML]="readmeRaw"
+      ></div>
+    </div>
   </div>
 </div>
