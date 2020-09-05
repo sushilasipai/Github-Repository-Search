@@ -42,3 +42,7 @@ $cardBgColor: pink;
     }
   }
 }
+
+:host ::ng-deep * {
+  max-width: 96%;
+}
