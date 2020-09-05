@@ -1,0 +1,81 @@
+<table class="table">
+  <thead class="table__header">
+    <th (click)="sortCriteria = 'name'">Repository Name</th>
+    <th (click)="sortCriteria = 'owner.login'">Author</th>
+    <th (click)="sortCriteria = 'stargazers_count'">
+      <i class="far fa-star"></i> Star
+    </th>
+    <th (click)="sortCriteria = 'watchers_count'">
+      <i class="far fa-eye"></i> Watcher
+    </th>
+    <th (click)="sortCriteria = 'forks_count'">
+      <i class="fas fa-code-branch"></i> Fork
+    </th>
+    <th (click)="sortCriteria = 'description'">Description</th>
+    <th (click)="sortCriteria = 'updated_at'">Last Update</th>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="
+        let repo of repos
+          | sort: sortCriteria
+          | paginate
+            : {
+                id: 'repo_pagination',
+                itemsPerPage: itemPerPage,
+                currentPage: page,
+                totalItems: repos.length
+              }
+      "
+      (click)="showRepoDetails(repo.id)"
+    >
+      <td>
+        {{ repo.name }}
+      </td>
+      <td>
+        {{ repo.owner.login }}
+      </td>
+      <td>
+        {{ repo.stargazers_count }}
+      </td>
+      <td>
+        {{ repo.watchers_count }}
+      </td>
+      <td>
+        {{ repo.forks_count }}
+      </td>
+      <td class="col-left">
+        {{ repo.description }}
+      </td>
+      <td>
+        {{ repo.updated_at | date: "dd/MMM/yyyy" }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <label class="pagination__label">Items per page: </label>
+
+  <select
+    class="pagination__dropdown"
+    (change)="itemPerPageChange($event.target.value)"
+  >
+    <option value="10">10</option>
+    <option value="25">25</option>
+    <option value="50">50</option>
+  </select>
+
+  <pagination-controls
+    id="repo_pagination"
+    (pageChange)="page = $event"
+    maxSize="100"
+    directionLinks="true"
+    autoHide="true"
+    responsive="true"
+    previousLabel="Previous"
+    nextLabel="Next"
+    class="pagination__controls"
+  >
+  </pagination-controls>
+</div>

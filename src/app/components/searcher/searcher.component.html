@@ -1,0 +1,11 @@
+<div class="searcher">
+  <input
+    type="text"
+    class="searcher__txtbox"
+    id="repo_txtbox"
+    placeholder="Github repository search"
+    [(ngModel)]="repoSearchString"
+    (keyup.enter)="searchRepos()"
+  />
+  <button class="searcher__btn" (click)="searchRepos()">Search</button>
+</div>

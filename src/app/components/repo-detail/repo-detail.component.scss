@@ -1,0 +1,44 @@
+$btnColor: #a0cff0;
+$cardBgColor: pink;
+
+.detail {
+  margin: 3%;
+
+  &__btn {
+    height: 35px;
+    width: 80px;
+    border-radius: 8px;
+    background-color: $btnColor;
+  }
+
+  &__card {
+    background-color: $cardBgColor;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+    padding: 2%;
+    width: 96%;
+    margin-top: 3%;
+
+    &__info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5%;
+
+      &__img {
+        height: 100px;
+        width: 100px;
+      }
+
+      &__data {
+        &-reponame {
+          font-size: x-large;
+        }
+      }
+    }
+
+    &__readme {
+      margin-top: 3%;
+    }
+  }
+}

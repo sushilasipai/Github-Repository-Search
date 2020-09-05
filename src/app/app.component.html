@@ -1,0 +1,23 @@
+<div class="container">
+  <h2>{{ pageHeader }}</h2>
+
+  <app-searcher
+    *ngIf="!detailFlg"
+    (searchRepoEvent)="showData($event)"
+  ></app-searcher>
+
+  <app-repos
+    *ngIf="repos && !detailFlg"
+    (showDetailsEvent)="showRepoDetails($event)"
+    [repos]="repos"
+  ></app-repos>
+
+  <app-repo-detail
+    *ngIf="detailFlg"
+    [repoDetail]="repoDetail"
+    (getReposEvent)="showRepoList()"
+  ></app-repo-detail>
+
+  <div *ngIf="loadingFlg"><app-loading> </app-loading></div>
+</div>
+<router-outlet></router-outlet>
