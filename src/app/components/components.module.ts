@@ -4,12 +4,11 @@ import { ReposComponent } from './repos/repos.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { SortPipe } from '../pipes/sort/sort.pipe';
 import { RepoDetailComponent } from './repo-detail/repo-detail.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [ReposComponent, RepoDetailComponent, SortPipe],
+  declarations: [ReposComponent, RepoDetailComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -19,6 +18,6 @@ import { RouterModule } from '@angular/router';
   ],
   providers: [],
   bootstrap: [],
-  exports: [ReposComponent, RepoDetailComponent, SortPipe],
+  exports: [ReposComponent, RepoDetailComponent],
 })
 export class ComponentsModule {}

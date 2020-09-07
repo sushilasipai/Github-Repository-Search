@@ -1,12 +1,25 @@
 $btnColor: #a0cff0;
 $cardBgColor: pink;
+$headerColor: rgb(236, 61, 90);
+
+.container {
+  max-width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  &__header {
+    color: $headerColor;
+    font-family: sans-serif;
+    text-align: center;
+  }
+}
 
 .detail {
   margin: 3%;
 
   &__btn {
     height: 35px;
-    width: 80px;
+    max-width: 80px;
     border-radius: 8px;
     background-color: $btnColor;
   }
@@ -17,8 +30,8 @@ $cardBgColor: pink;
     transition: 0.3s;
     border-radius: 5px;
     padding: 2%;
-    width: 96%;
     margin-top: 3%;
+    word-break: keep-all;
 
     &__info {
       display: flex;
@@ -26,8 +39,8 @@ $cardBgColor: pink;
       gap: 5%;
 
       &__img {
-        height: 100px;
-        width: 100px;
+        max-height: 100px;
+        max-width: 100px;
       }
 
       &__data {
@@ -44,5 +57,5 @@ $cardBgColor: pink;
 }
 
 :host ::ng-deep * {
-  max-width: 96%;
+  max-width: 100%;
 }

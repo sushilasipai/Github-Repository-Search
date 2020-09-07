@@ -1,47 +1,154 @@
 <div class="container">
-  <h2>Search Github Repository</h2>
+  <div class="header">
+    <h2>Search Github Repository</h2>
 
-  <div class="searcher">
-    <input
-      type="text"
-      class="searcher__txtbox"
-      id="repo_txtbox"
-      placeholder="Github repository search"
-      [(ngModel)]="repoSearchString"
-      (keyup.enter)="searchRepos()"
-    />
-    <button class="searcher__btn" (click)="searchRepos()">Search</button>
+    <div class="searcher">
+      <div class="searcher__sort">
+        <label class="searcher__sort__label">Sort By:</label>
+        <select
+          class="searcher__sort__dropdown"
+          (change)="sortRepos($event.target.value)"
+          [(ngModel)]="sortCriteria"
+        >
+          <!--<option [ngValue]="sortCriteria" selected hidden>Stars</option>-->
+          <option value="stars" selected>Stars</option>
+          <option value="forks">Forks</option>
+          <option value="updated">Last Update</option>
+        </select>
+      </div>
+
+      <div class="searcher__search">
+        <input
+          type="text"
+          class="searcher__search__txtbox"
+          id="repo_txtbox"
+          placeholder="Github repository search"
+          [(ngModel)]="repoSearchString"
+          (keyup.enter)="searchRepos()"
+        />
+        <button class="searcher__search__btn" (click)="searchRepos()">
+          Search
+        </button>
+      </div>
+
+      <div class="searcher__pagination">
+        <div class="searcher__pagination__itemsPerPage">
+          <label class="searcher__pagination__label">#Items: </label>
+
+          <select
+            class="searcher__pagination__dropdown"
+            (change)="itemPerPageChange($event.target.value)"
+            [(ngModel)]="itemPerPage"
+          >
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div class="searcher__pagination__controls" *ngIf="noOfPages">
+          <button
+            class="searcher__pagination__first"
+            title="First Page"
+            (click)="changePage(1)"
+            [disabled]="page <= 1"
+          >
+            <i class="fas fa-angle-double-left"></i>
+          </button>
+          <button
+            class="searcher__pagination__prev"
+            title="Previous"
+            (click)="changePage(page - 1)"
+            [disabled]="page <= 1"
+          >
+            <i class="fas fa-angle-left"></i>
+          </button>
+          <label> Page:</label>
+          <input
+            type="number"
+            class="searcher__pagination__txtbox"
+            [(ngModel)]="page"
+            placeholder="Pg No."
+            (change)="changePage(page)"
+          />
+
+          <label> of {{ noOfPages }} </label>
+          <button
+            class="searcher__pagination__next"
+            title="Next"
+            (click)="changePage(page + 1)"
+            [disabled]="page >= noOfPages"
+          >
+            <i class="fas fa-angle-right"></i>
+          </button>
+          <button
+            class="searcher__pagination__last"
+            title="Last Page"
+            (click)="changePage(noOfPages)"
+            [disabled]="page >= noOfPages"
+          >
+            <i class="fas fa-angle-double-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <h4 *ngIf="repos[0] == 'null'">Loading Data. Please wait!!</h4>
-  <div *ngIf="repos && repos[0] != 'null'">
-    <table class="table">
+
+  <div class="card" *ngIf="repos && repos[0] != 'null'">
+    <div
+      class="card__info"
+      *ngFor="let repo of repos"
+      (click)="showDetails(repo.id)"
+    >
+      <div class="card__info__title">
+        <div class="card__info__title__name" title="Repository name">
+          {{ repo.name }}
+        </div>
+        <div class="card__info__title__author" title="Author">
+          -{{ repo.owner.login }}
+        </div>
+      </div>
+      <div class="card__info__body">
+        {{ repo.description }}
+      </div>
+      <div class="card__info__footer">
+        <div title="Stars">
+          <i class="far fa-star"></i>
+          {{ repo.stargazers_count }}
+        </div>
+        <div title="Watchers">
+          <i class="far fa-eye"></i>
+          {{ repo.watchers_count }}
+        </div>
+        <div title="Forks">
+          <i class="fas fa-code-branch"></i>
+          {{ repo.forks_count }}
+        </div>
+        <div title="Last Update">
+          <i class="fas fa-edit"></i>
+          {{ repo.updated_at | date: "medium":"UTC" }}
+        </div>
+      </div>
+    </div>
+    <div class="card__info-hidden" *ngIf="itemPerPage == 25"></div>
+    <!--
+    <table class="cards_table">
       <thead class="table__header">
-        <th (click)="sortCriteria = 'name'">Repository Name</th>
-        <th (click)="sortCriteria = 'owner.login'">Author</th>
-        <th (click)="sortCriteria = 'stargazers_count'">
-          <i class="far fa-star"></i> Star
+        <th *ngFor="let header of headers">
+          <i *ngIf="header.img" class="{{ header.img }}"></i>{{ header.name }}
         </th>
-        <th (click)="sortCriteria = 'watchers_count'">
-          <i class="far fa-eye"></i> Watcher
-        </th>
-        <th (click)="sortCriteria = 'forks_count'">
-          <i class="fas fa-code-branch"></i> Fork
-        </th>
-        <th (click)="sortCriteria = 'description'">Description</th>
-        <th (click)="sortCriteria = 'updated_at'">Last Update</th>
       </thead>
       <tbody>
         <tr
           *ngFor="
             let repo of repos
-              | sort: sortCriteria
               | paginate
                 : {
                     id: 'repo_pagination',
                     itemsPerPage: itemPerPage,
                     currentPage: page,
-                    totalItems: repos.length
+                    totalItems: totalitems
                   }
           "
           (click)="showDetails(repo.id)"
@@ -65,36 +172,11 @@
             {{ repo.description }}
           </td>
           <td>
-            {{ repo.updated_at | date: "dd/MMM/yyyy" }}
+            {{ repo.updated_at | date: "medium":"UTC" }}
           </td>
         </tr>
       </tbody>
     </table>
-
-    <div class="pagination">
-      <label class="pagination__label">Items per page: </label>
-
-      <select
-        class="pagination__dropdown"
-        (change)="itemPerPageChange($event.target.value)"
-      >
-        <option value="10">10</option>
-        <option value="25">25</option>
-        <option value="50">50</option>
-      </select>
-
-      <pagination-controls
-        id="repo_pagination"
-        (pageChange)="page = $event"
-        maxSize="100"
-        directionLinks="true"
-        autoHide="true"
-        responsive="true"
-        previousLabel="Previous"
-        nextLabel="Next"
-        class="pagination__controls"
-      >
-      </pagination-controls>
-    </div>
+    -->
   </div>
 </div>

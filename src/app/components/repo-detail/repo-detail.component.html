@@ -1,7 +1,9 @@
 <div class="container">
-  <h2>Repository Details</h2>
+  <h2 class="container__header">Repository Details</h2>
   <div class="detail">
-    <button class="detail__btn" (click)="getRepoList()">Back</button>
+    <button class="detail__btn" (click)="getRepoList()">
+      <i class="fas fa-angle-double-left"></i> Back
+    </button>
 
     <div class="detail__card">
       <div class="detail__card__info">
@@ -36,7 +38,7 @@
         </div>
       </div>
       <div *ngIf="readmeRaw == 'null'" class="detail__card__readme">
-        Loading readme contents... Plese wait!!!
+        <h4>Loading readme contents... Plese wait!!!</h4>
       </div>
 
       <div

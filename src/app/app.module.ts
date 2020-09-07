@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ComponentsModule } from './components/components.module';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [AppComponent],

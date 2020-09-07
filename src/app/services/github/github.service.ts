@@ -7,9 +7,13 @@ import { Observable } from 'rxjs';
 })
 export class GithubService {
   repos: String[];
+  itemPerPage: number;
+  sortCriteria: string;
+  repoSearchString: String;
   selectedId: String;
   repoDetail: String;
   backFlg = false;
+  page: number;
 
   constructor(private http: HttpClient) {}
 
