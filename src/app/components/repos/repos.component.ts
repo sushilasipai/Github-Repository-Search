@@ -52,8 +52,10 @@ export class ReposComponent implements OnInit {
   //gets repositories that match the search string
   searchRepos() {
     if (this.repoSearchString) {
+      //changes page to ceiling if decimal no provided
       this.page = Math.ceil(this.page);
 
+      //searches repo only if page no is valid
       if (!this.noOfPages || (this.page > 0 && this.page <= this.noOfPages)) {
         this.repos = ['null'];
         this.githubService.repoSearchString = this.repoSearchString;
@@ -68,14 +70,12 @@ export class ReposComponent implements OnInit {
           '&per_page=' +
           this.itemPerPage;
 
-        console.log(repourl);
+        //subscription to github api response via service
         this.githubService.getRepoInfo(repourl).subscribe((data) => {
           this.repos = data.items;
           this.totalItems = data.total_count;
           this.githubService.repos = this.repos;
           this.noOfPages = Math.ceil(+this.totalItems / +this.itemPerPage);
-          console.log(data);
-          console.log('no of pages' + this.noOfPages);
         });
       } else {
         alert('Invalid page number!!');
