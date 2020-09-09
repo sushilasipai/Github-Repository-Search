@@ -21,21 +21,20 @@ export class RepoDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id');
     this.showRepoDetails();
   }
 
   //go to home page on back button click
   getRepoList() {
-    this.githubService.backFlg = true;
     this.router.navigateByUrl('home');
   }
 
   //get repository details of the selected repo
   showRepoDetails() {
-    this.repoDetail = this.githubService.getRepoDetails();
+    this.repoDetail = this.githubService.getRepoDetails(this.id);
 
     const readmeurl = this.repoDetail.url + '/readme';
-
     this.githubService.getRepoInfo(readmeurl).subscribe((data) => {
       var converter = new showdown.Converter();
       this.readmeRaw = converter.makeHtml(this.b64_to_utf8(data.content));

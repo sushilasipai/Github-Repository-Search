@@ -9,7 +9,7 @@ const routes: Routes = [
     component: ReposComponent,
   },
   {
-    path: 'details',
+    path: 'details/:id',
     component: RepoDetailComponent,
   },
   {

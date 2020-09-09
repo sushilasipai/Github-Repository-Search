@@ -33,7 +33,7 @@ label {
   padding: 0 1% 1%;
 }
 
-.searcher {
+.searchbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -48,7 +48,8 @@ label {
     }
 
     &__txtbox {
-      max-width: 63px;
+      max-width: 45px;
+      text-align: center;
     }
 
     button {
@@ -136,7 +137,7 @@ label {
     font-size: 6vw;
     padding-top: 15px;
   }
-  .searcher {
+  .searchbar {
     &__search {
       order: 1;
     }

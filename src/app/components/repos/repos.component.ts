@@ -14,87 +14,133 @@ export class ReposComponent implements OnInit {
   itemPerPage = 10;
   page = 1;
   sortCriteria = 'stars';
-  repoDetail: String;
   noOfPages: number;
+  oddNoData = false;
 
   constructor(private router: Router, private githubService: GithubService) {}
 
   ngOnInit(): void {
-    this.githubService.sortCriteria = this.sortCriteria;
-    this.githubService.itemPerPage = this.itemPerPage;
-    this.githubService.page = this.page;
+    this.repos = JSON.parse(sessionStorage.getItem('repos'));
 
-    //load previous repository list when back from detail page
-    if (this.githubService.backFlg) {
-      this.repos = this.githubService.repos;
-      this.repoSearchString = this.githubService.repoSearchString;
-      this.sortCriteria = this.githubService.sortCriteria;
-      this.itemPerPage = this.githubService.itemPerPage;
-      this.page = this.githubService.page;
-      this.githubService.backFlg = false;
+    //on first time page load set default values to local storage
+    if (!this.repos) {
+      sessionStorage.setItem('sortCriteria', JSON.stringify(this.sortCriteria));
+      sessionStorage.setItem('itemPerPage', JSON.stringify(this.itemPerPage));
+      sessionStorage.setItem('page', JSON.stringify(this.page));
+      sessionStorage.setItem('oddNoData', JSON.stringify(this.oddNoData));
     }
+
+    this.repoSearchString = JSON.parse(
+      sessionStorage.getItem('repoSearchString')
+    );
+    this.itemPerPage = JSON.parse(sessionStorage.getItem('itemPerPage'));
+    this.page = JSON.parse(sessionStorage.getItem('page'));
+    this.sortCriteria = JSON.parse(sessionStorage.getItem('sortCriteria'));
+    this.noOfPages = JSON.parse(sessionStorage.getItem('noOfPages'));
+    this.oddNoData = JSON.parse(sessionStorage.getItem('oddNoData'));
   }
 
   //change no of items per page
   itemPerPageChange(itemPerPage) {
     this.itemPerPage = itemPerPage;
-    this.githubService.itemPerPage = this.itemPerPage;
+    sessionStorage.setItem('itemPerPage', JSON.stringify(this.itemPerPage));
+    this.calcTotalPages();
     this.searchRepos();
+  }
+
+  //calculate total no of pages
+  calcTotalPages() {
+    this.noOfPages = Math.ceil(+this.totalItems / +this.itemPerPage);
+    sessionStorage.setItem('noOfPages', JSON.stringify(this.noOfPages));
   }
 
   //change page no
   changePage(page) {
     this.page = page;
-    this.githubService.page = this.page;
+    sessionStorage.setItem('page', JSON.stringify(this.page));
     this.searchRepos();
-  }
-
-  //gets repositories that match the search string
-  searchRepos() {
-    if (this.repoSearchString) {
-      //changes page to ceiling if decimal no provided
-      this.page = Math.ceil(this.page);
-
-      //searches repo only if page no is valid
-      if (!this.noOfPages || (this.page > 0 && this.page <= this.noOfPages)) {
-        this.repos = ['null'];
-        this.githubService.repoSearchString = this.repoSearchString;
-
-        const repourl =
-          'https://api.github.com/search/repositories?q=' +
-          this.repoSearchString +
-          '&sort=' +
-          this.sortCriteria +
-          '&order=desc&page=' +
-          this.page +
-          '&per_page=' +
-          this.itemPerPage;
-
-        //subscription to github api response via service
-        this.githubService.getRepoInfo(repourl).subscribe((data) => {
-          this.repos = data.items;
-          this.totalItems = data.total_count;
-          this.githubService.repos = this.repos;
-          this.noOfPages = Math.ceil(+this.totalItems / +this.itemPerPage);
-        });
-      } else {
-        alert('Invalid page number!!');
-      }
-    } else {
-      alert('Please enter search string!!');
-    }
   }
 
   //sort repositories according to search criteria
   sortRepos(sortCriteria) {
     this.sortCriteria = sortCriteria;
-    this.githubService.sortCriteria = this.sortCriteria;
+    sessionStorage.setItem('sortCriteria', JSON.stringify(this.sortCriteria));
     this.searchRepos();
   }
 
-  //show repository details on table row click
+  //show repository details of selected card
   showDetails(id) {
-    this.githubService.selectedId = id;
-    this.router.navigateByUrl('details');
+    this.router.navigate(['details', id]);
+  }
+
+  //validate parameters for repository search
+  inputValidation() {
+    if (this.repoSearchString) {
+      //start new string search at first page
+      if (
+        this.repoSearchString !=
+        JSON.parse(sessionStorage.getItem('repoSearchString'))
+      ) {
+        sessionStorage.setItem(
+          'repoSearchString',
+          JSON.stringify(this.repoSearchString)
+        );
+        this.changePage(1);
+      }
+
+      //changes page to ceiling if decimal no provided
+      this.page = Math.ceil(this.page);
+
+      //searches repo only if page no is valid
+      if (!this.noOfPages || (this.page > 0 && this.page <= this.noOfPages)) {
+        return true;
+      } else {
+        alert('Invalid page number!!');
+        return false;
+      }
+    } else {
+      alert('Please enter search string!!');
+      return false;
+    }
+  }
+
+  //gets repositories that match the search string
+  searchRepos() {
+    if (this.inputValidation()) {
+      this.repos = ['null'];
+
+      const repourl =
+        'https://api.github.com/search/repositories?q=' +
+        this.repoSearchString +
+        '&sort=' +
+        this.sortCriteria +
+        '&order=desc&page=' +
+        this.page +
+        '&per_page=' +
+        this.itemPerPage;
+
+      //subscription to github api response via service
+      this.githubService.getRepoInfo(repourl).subscribe(
+        (data) => {
+          console.log(data);
+          if (data.total_count == 0) {
+            this.repos = ['no data'];
+          } else {
+            //api has data limit of max 1000
+            this.totalItems = data.total_count > 1000 ? 1000 : data.total_count;
+            this.repos = data.items;
+            sessionStorage.setItem('repos', JSON.stringify(this.repos));
+            this.calcTotalPages();
+            this.oddNoData = data.items.length % 2 == 0 ? false : true;
+            sessionStorage.setItem('oddNoData', JSON.stringify(this.oddNoData));
+          }
+        },
+        (error) => {
+          alert(error);
+          console.log('error is:');
+          console.log(error);
+        }
+      );
+    }
   }
 }
