@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { GithubService } from '../../services/github/github.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { GithubService } from 'src/app/services/github/github.service';
 
 @Component({
   selector: 'app-repos',
@@ -11,17 +10,18 @@ export class ReposComponent implements OnInit {
   repoSearchString: String;
   repos: String[];
   totalItems: any;
+  noOfPages: number;
   itemPerPage = 10;
   page = 1;
   sortCriteria = 'stars';
-  noOfPages: number;
   oddNoData = false;
 
-  constructor(private router: Router, private githubService: GithubService) {}
+  constructor(public githubService: GithubService) {}
 
   ngOnInit(): void {
     this.repos = JSON.parse(sessionStorage.getItem('repos'));
-
+    console.log('repos at searchbar init is');
+    console.log(this.repos);
     //on first time page load set default values to local storage
     if (!this.repos) {
       sessionStorage.setItem('sortCriteria', JSON.stringify(this.sortCriteria));
@@ -66,11 +66,6 @@ export class ReposComponent implements OnInit {
     this.sortCriteria = sortCriteria;
     sessionStorage.setItem('sortCriteria', JSON.stringify(this.sortCriteria));
     this.searchRepos();
-  }
-
-  //show repository details of selected card
-  showDetails(id) {
-    this.router.navigate(['details', id]);
   }
 
   //validate parameters for repository search
@@ -122,7 +117,6 @@ export class ReposComponent implements OnInit {
       //subscription to github api response via service
       this.githubService.getRepoInfo(repourl).subscribe(
         (data) => {
-          console.log(data);
           if (data.total_count == 0) {
             this.repos = ['no data'];
           } else {
@@ -137,8 +131,6 @@ export class ReposComponent implements OnInit {
         },
         (error) => {
           alert(error);
-          console.log('error is:');
-          console.log(error);
         }
       );
     }

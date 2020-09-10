@@ -1,11 +1,14 @@
+h4 {
+  margin-top: 10%;
+  text-align: center;
+}
+
 $bgColor: rgb(243, 222, 222);
 $btnColor: #a0cff0;
 $labelColor: rgb(97, 92, 92);
 $btnColor: rgb(196, 206, 238);
 $btnHoverColor: rgb(109, 172, 245);
 $headerColor: rgb(236, 61, 90);
-$cardColor: pink;
-$footerColor: #443e3e;
 
 h2 {
   color: $headerColor;
@@ -13,10 +16,6 @@ h2 {
   justify-content: center;
   text-align: center;
   padding-top: 5px;
-}
-h4 {
-  margin-top: 10%;
-  text-align: center;
 }
 
 label {
@@ -84,54 +83,6 @@ label {
   }
 }
 
-.card {
-  display: flex;
-  justify-content: space-around;
-  flex-flow: wrap;
-  height: 82vh;
-  overflow-y: auto;
-  overflow-x: auto;
-  font-size: 14px;
-
-  &__info {
-    background-color: $cardColor;
-    width: 45%;
-    border-radius: 8px;
-    margin: 1% 0;
-    transition: 0.3s;
-    padding: 10px;
-
-    &__title {
-      text-align: center;
-      padding: 10px;
-      &__name {
-        font-size: 20px;
-        text-decoration: underline;
-      }
-    }
-
-    &__footer {
-      padding: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      color: $footerColor;
-      font-size: 12px;
-    }
-
-    :hover {
-      transform: scale(1.05);
-      padding: 1.03px 10.3px;
-    }
-
-    &-hidden {
-      background-color: red;
-      width: 45%;
-      visibility: hidden;
-    }
-  }
-}
-
 @media screen and (max-width: 450px) {
   h2 {
     font-size: 6vw;
@@ -149,12 +100,6 @@ label {
       margin-top: 6px;
       order: 3;
       display: grid;
-    }
-  }
-  .card {
-    height: 65vh;
-    &__info {
-      width: 85%;
     }
   }
 }

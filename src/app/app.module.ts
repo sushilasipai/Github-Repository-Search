@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ComponentsModule } from './components/components.module';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -16,7 +15,6 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     FormsModule,
     ComponentsModule,
-    NgxPaginationModule,
     RouterModule,
   ],
   providers: [],

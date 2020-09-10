@@ -1,1 +1,38 @@
-<p>repo-cards works!</p>
+<div class="card">
+  <div
+    class="card__info"
+    *ngFor="let repo of repos"
+    (click)="showDetails(repo.id)"
+  >
+    <div class="card__info__title">
+      <div class="card__info__title__name" title="Repository name">
+        {{ repo.name }}
+      </div>
+      <div class="card__info__title__author" title="Author">
+        -{{ repo.owner.login }}
+      </div>
+    </div>
+    <div class="card__info__body">
+      {{ repo.description }}
+    </div>
+    <div class="card__info__footer">
+      <div title="Stars">
+        <i class="far fa-star"></i>
+        {{ repo.stargazers_count }}
+      </div>
+      <div title="Watchers">
+        <i class="far fa-eye"></i>
+        {{ repo.watchers_count }}
+      </div>
+      <div title="Forks">
+        <i class="fas fa-code-branch"></i>
+        {{ repo.forks_count }}
+      </div>
+      <div title="Last Update">
+        <i class="fas fa-edit"></i>
+        {{ repo.updated_at | date: "medium":"UTC" }}
+      </div>
+    </div>
+  </div>
+  <div class="card__info-hidden" *ngIf="oddNoData"></div>
+</div>
