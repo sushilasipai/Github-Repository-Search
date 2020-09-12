@@ -33,12 +33,21 @@ export class RepoDetailComponent implements OnInit {
   //get repository details of the selected repo
   showRepoDetails() {
     this.repoDetail = this.githubService.getRepoDetails(this.id);
-
-    const readmeurl = this.repoDetail.url + '/readme';
-    this.githubService.getRepoInfo(readmeurl).subscribe((data) => {
-      var converter = new showdown.Converter();
-      this.readmeRaw = converter.makeHtml(this.b64_to_utf8(data.content));
-    });
+    if (this.repoDetail) {
+      const readmeurl = this.repoDetail.url + '/readme';
+      this.githubService.getRepoInfo(readmeurl).subscribe(
+        (data) => {
+          var converter = new showdown.Converter();
+          this.readmeRaw = converter.makeHtml(this.b64_to_utf8(data.content));
+        },
+        (error) => {
+          if (error != 'Not Found') {
+            alert(error);
+          }
+          this.readmeRaw = 'No Readme Contents';
+        }
+      );
+    }
   }
 
   //decodes base64 to UTF-8

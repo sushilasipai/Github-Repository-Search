@@ -1,11 +1,12 @@
 <div class="container">
   <h2 class="container__header">Repository Details</h2>
+
   <div class="detail">
     <button class="detail__btn" (click)="getRepoList()">
       <i class="fas fa-angle-double-left"></i> Back
     </button>
 
-    <div class="detail__card">
+    <div class="detail__card" *ngIf="repoDetail">
       <div class="detail__card__info">
         <div>
           <img

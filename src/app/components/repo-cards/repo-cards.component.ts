@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,16 +6,11 @@ import { Router } from '@angular/router';
   templateUrl: './repo-cards.component.html',
   styleUrls: ['./repo-cards.component.scss'],
 })
-export class RepoCardsComponent implements OnInit {
-  repos: String[];
-  oddNoData: boolean;
-
+export class RepoCardsComponent {
   constructor(private router: Router) {}
 
-  ngOnInit(): void {
-    this.repos = JSON.parse(sessionStorage.getItem('repos'));
-    this.oddNoData = JSON.parse(sessionStorage.getItem('oddNoData'));
-  }
+  @Input() repos: String[];
+  @Input() oddNoData: boolean;
 
   //show repository details of selected card
   showDetails(id) {

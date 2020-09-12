@@ -1,101 +1,24 @@
 <div class="container">
-  <div class="header">
-    <h2>Search Github Repository</h2>
+  <app-searchbar
+    (sortReposEvent)="sortRepos($event)"
+    (searchReposEvent)="searchRepos($event)"
+    (itemPerPageChangeEvent)="itemPerPageChange($event)"
+    (changePageEvent)="changePage($event)"
+    [sortCriteria]="sortCriteria"
+    [itemPerPage]="itemPerPage"
+    [noOfPages]="noOfPages"
+    [repoSearchString]="repoSearchString"
+    [page]="page"
+  ></app-searchbar>
 
-    <div class="searchbar">
-      <div class="searchbar__sort">
-        <label class="searchbar__sort__label">Sort By:</label>
-        <select
-          class="searchbar__sort__dropdown"
-          (change)="sortRepos($event.target.value)"
-          [(ngModel)]="sortCriteria"
-        >
-          <option value="stars" selected>Stars</option>
-          <option value="forks">Forks</option>
-          <option value="updated">Last Update</option>
-        </select>
-      </div>
+  <div *ngIf="repos">
+    <h4 *ngIf="repos[0] == 'null'">Loading Data. Please wait!!!</h4>
+    <h4 *ngIf="repos[0] == 'no data'">No data found!!!</h4>
 
-      <div class="searchbar__search">
-        <input
-          type="text"
-          class="searchbar__search__txtbox"
-          id="repo_txtbox"
-          placeholder="Github repository search"
-          [(ngModel)]="repoSearchString"
-          (keyup.enter)="searchRepos()"
-        />
-        <button class="searchbar__search__btn" (click)="searchRepos()">
-          Search
-        </button>
-      </div>
-
-      <div class="searchbar__pagination">
-        <div class="searchbar__pagination__itemsPerPage">
-          <label class="searchbar__pagination__label">#Items: </label>
-
-          <select
-            class="searchbar__pagination__dropdown"
-            (change)="itemPerPageChange($event.target.value)"
-            [(ngModel)]="itemPerPage"
-          >
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
-        </div>
-        <div class="searchbar__pagination__controls" *ngIf="noOfPages">
-          <button
-            class="searchbar__pagination__first"
-            title="First Page"
-            (click)="changePage(1)"
-            [disabled]="page <= 1"
-          >
-            <i class="fas fa-angle-double-left"></i>
-          </button>
-          <button
-            class="searchbar__pagination__prev"
-            title="Previous"
-            (click)="changePage(page - 1)"
-            [disabled]="page <= 1"
-          >
-            <i class="fas fa-angle-left"></i>
-          </button>
-          <label> Page:</label>
-          <input
-            type="number"
-            class="searchbar__pagination__txtbox"
-            [(ngModel)]="page"
-            placeholder="Pg No."
-            (change)="changePage(page)"
-          />
-
-          <label> of {{ noOfPages }} </label>
-          <button
-            class="searchbar__pagination__next"
-            title="Next"
-            (click)="changePage(page + 1)"
-            [disabled]="page >= noOfPages"
-          >
-            <i class="fas fa-angle-right"></i>
-          </button>
-          <button
-            class="searchbar__pagination__last"
-            title="Last Page"
-            (click)="changePage(noOfPages)"
-            [disabled]="page >= noOfPages"
-          >
-            <i class="fas fa-angle-double-right"></i>
-          </button>
-        </div>
-      </div>
-    </div>
+    <app-repo-cards
+      *ngIf="repos[0] != 'null' && repos[0] != 'no data'"
+      [repos]="repos"
+      [oddNoData]="oddNoData"
+    ></app-repo-cards>
   </div>
-
-  <h4 *ngIf="repos[0] == 'null'">Loading Data. Please wait!!!</h4>
-  <h4 *ngIf="repos[0] == 'no data'">No data found!!!</h4>
-
-  <app-repo-cards
-    *ngIf="repos && repos[0] != 'null' && repos[0] != 'no data'"
-  ></app-repo-cards>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GithubService } from 'src/app/services/github/github.service';
 
 @Component({
@@ -20,16 +20,19 @@ export class ReposComponent implements OnInit {
 
   ngOnInit(): void {
     this.repos = JSON.parse(sessionStorage.getItem('repos'));
-    console.log('repos at searchbar init is');
-    console.log(this.repos);
-    //on first time page load set default values to local storage
+
+    //on first time page load set default values to session storage
     if (!this.repos) {
       sessionStorage.setItem('sortCriteria', JSON.stringify(this.sortCriteria));
       sessionStorage.setItem('itemPerPage', JSON.stringify(this.itemPerPage));
       sessionStorage.setItem('page', JSON.stringify(this.page));
       sessionStorage.setItem('oddNoData', JSON.stringify(this.oddNoData));
     }
+    this.loadValues();
+  }
 
+  //get values from session variables to local variables
+  loadValues() {
     this.repoSearchString = JSON.parse(
       sessionStorage.getItem('repoSearchString')
     );
@@ -100,7 +103,9 @@ export class ReposComponent implements OnInit {
   }
 
   //gets repositories that match the search string
-  searchRepos() {
+  searchRepos(repoSearchString = this.repoSearchString) {
+    this.repoSearchString = repoSearchString;
+
     if (this.inputValidation()) {
       this.repos = ['null'];
 

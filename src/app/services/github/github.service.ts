@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -18,18 +18,20 @@ export class GithubService {
   }
 
   //error handler
-  handleError(error) {
-    return throwError(error.message || 'Server Error');
+  handleError(error: HttpErrorResponse) {
+    return throwError(error.statusText || 'Server Error');
   }
 
   //gets details of the selected repository
   getRepoDetails(id): String {
-    this.repos = JSON.parse(sessionStorage.getItem('repos'));
-    this.repos.filter((data) => {
-      if (data['id'] == id) {
-        this.repoDetail = JSON.parse(JSON.stringify(data));
-      }
-    });
+    this.repos = JSON.parse(sessionStorage.getItem('repos') || null);
+    if (this.repos) {
+      this.repos.filter((data) => {
+        if (data['id'] == id) {
+          this.repoDetail = JSON.parse(JSON.stringify(data || null));
+        }
+      });
+    }
     return this.repoDetail;
   }
 }

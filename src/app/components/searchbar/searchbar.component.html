@@ -1,14 +1,12 @@
 <div class="header">
   <h2>Search Github Repository</h2>
-  <h1>Header</h1>
-  <h1>{{ itemPerPage }}</h1>
   <div class="searchbar">
     <div class="searchbar__sort">
       <label class="searchbar__sort__label">Sort By:</label>
       <select
         class="searchbar__sort__dropdown"
-        (change)="sortRepos($event.target.value)"
-        [(ngModel)]="sortCriteria"
+        (change)="sortReposEvent.emit($event.target.value)"
+        [value]="sortCriteria"
       >
         <option value="stars" selected>Stars</option>
         <option value="forks">Forks</option>
@@ -20,12 +18,15 @@
       <input
         type="text"
         class="searchbar__search__txtbox"
-        id="repo_txtbox"
+        #repo_search_string
         placeholder="Github repository search"
-        [(ngModel)]="repoSearchString"
-        (keyup.enter)="searchRepos()"
+        [value]="repoSearchString"
+        (keyup.enter)="searchReposEvent.emit($event.target.value)"
       />
-      <button class="searchbar__search__btn" (click)="searchRepos()">
+      <button
+        class="searchbar__search__btn"
+        (click)="searchReposEvent.emit(repo_search_string.value)"
+      >
         Search
       </button>
     </div>
@@ -36,8 +37,8 @@
 
         <select
           class="searchbar__pagination__dropdown"
-          (change)="itemPerPageChange($event.target.value)"
-          [(ngModel)]="itemPerPage"
+          (change)="itemPerPageChangeEvent.emit($event.target.value)"
+          [value]="itemPerPage"
         >
           <option value="10">10</option>
           <option value="25">25</option>
@@ -48,7 +49,7 @@
         <button
           class="searchbar__pagination__first"
           title="First Page"
-          (click)="changePage(1)"
+          (click)="changePageEvent.emit(1)"
           [disabled]="page <= 1"
         >
           <i class="fas fa-angle-double-left"></i>
@@ -56,7 +57,7 @@
         <button
           class="searchbar__pagination__prev"
           title="Previous"
-          (click)="changePage(page - 1)"
+          (click)="changePageEvent.emit(page - 1)"
           [disabled]="page <= 1"
         >
           <i class="fas fa-angle-left"></i>
@@ -65,16 +66,16 @@
         <input
           type="number"
           class="searchbar__pagination__txtbox"
-          [(ngModel)]="page"
+          [value]="page"
           placeholder="Pg No."
-          (change)="changePage(page)"
+          (change)="changePageEvent.emit(page)"
         />
 
         <label> of {{ noOfPages }} </label>
         <button
           class="searchbar__pagination__next"
           title="Next"
-          (click)="changePage(page + 1)"
+          (click)="changePageEvent.emit(page + 1)"
           [disabled]="page >= noOfPages"
         >
           <i class="fas fa-angle-right"></i>
@@ -82,7 +83,7 @@
         <button
           class="searchbar__pagination__last"
           title="Last Page"
-          (click)="changePage(noOfPages)"
+          (click)="changePageEvent.emit(noOfPages)"
           [disabled]="page >= noOfPages"
         >
           <i class="fas fa-angle-double-right"></i>
